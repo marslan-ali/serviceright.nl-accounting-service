@@ -1,0 +1,113 @@
+{
+    "executionRoleArn": "arn:aws:iam::339951081844:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "volumes": [],
+    "family": "serviceright-microservices",
+    "containerDefinitions": [
+        {
+            "image": "339951081844.dkr.ecr.eu-central-1.amazonaws.com/booking-service:latest",
+            "name": "app",
+            "memoryReservation": 128,
+            "dnsSearchDomains": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "serviceright-microservices",
+                    "awslogs-region": "eu-central-1",
+                    "awslogs-stream-prefix": "booking-service"
+                }
+            },
+            "entryPoint": [],
+            "portMappings": [
+                {
+                    "containerPort": 80
+                }
+            ],
+            "environment": [
+                {
+                    "name": "DB_HOST",
+                    "value": "production-database.cmeuqr37naqu.eu-central-1.rds.amazonaws.com"
+                },
+                {
+                    "name": "DB_DATABASE",
+                    "value": "booking-service"
+                },
+                {
+                    "name": "DB_USERNAME",
+                    "value": "api-gateway-user"
+                },
+                {
+                    "name": "REDIS_HOST",
+                    "value": "atm-caching.uqfyhq.0001.euc1.cache.amazonaws.com"
+                },
+                {
+                    "name": "APP_URL",
+                    "value": "http://booking-service.local"
+                },
+                {
+                    "name": "CACHE_DRIVER",
+                    "value": "redis"
+                },
+                {
+                    "name": "MACHINE_CLIENT_ID",
+                    "value": "12"
+                },
+                {
+                    "name": "MACHINE_SECRET",
+                    "value": "cee2Nj8b9OM5qOh2QKY8USuWD7kIc6M58sX3ock3"
+                },
+                {
+                    "name": "BROADCAST_DRIVER",
+                    "value": "sns"
+                },
+                {
+                    "name": "QUEUE_CONNECTION",
+                    "value": "sqs"
+                },
+                {
+                    "name": "SQS_PREFIX",
+                    "value": "https://sqs.eu-central-1.amazonaws.com/339951081844"
+                },
+                {
+                    "name": "SQS_QUEUE",
+                    "value": "booking-service"
+                }
+            ],
+            "secrets": [
+                {
+                    "name": "APP_KEY",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:339951081844:parameter/API_GATEWAY_APP_KEY"
+                },
+                {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:339951081844:parameter/API_GATEWAY_SERVICE_DATABASE_PASSWORD"
+                },
+                {
+                    "name": "G_RECAPTCHA_SECRET",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:339951081844:parameter/API_GATEWAY_RECAPTCHA_SECRET"
+                },
+                {
+                    "name": "PASSPORT_PUBLIC_KEY",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:339951081844:parameter/API_GATEWAY_OAUTH_PUBLIC"
+                }
+            ],
+            "command": [],
+            "linuxParameters": {
+                "devices": []
+            },
+            "dnsServers": [],
+            "mountPoints": [],
+            "dockerSecurityOptions": [],
+            "volumesFrom": [],
+            "essential": true,
+            "links": [],
+            "extraHosts": [],
+            "readonlyRootFilesystem": false,
+            "privileged": false
+        }
+    ],
+    "placementConstraints": [],
+    "requiresCompatibilities": [
+        "EC2"
+    ]
+}

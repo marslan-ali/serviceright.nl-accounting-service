@@ -1,0 +1,43 @@
+#!/bin/sh
+printf "Booting Application...\n";
+
+set -e
+
+env=${APP_ENV:-production}
+
+if [ "$env" != "local" ]; then
+    printf "Removing Xdebug......\n"
+    rm -rf /usr/local/etc/php/conf.d/{docker-php-ext-xdebug,xdebug}.ini
+    php /var/www/html/artisan route:cache
+    php /var/www/html/artisan event:cache
+    php /var/www/html/artisan config:cache
+    php /var/www/html/artisan route:clear
+fi
+
+if [ "$env" == "local" ]; then
+    printf "Removing queue worker......\n"
+    rm -rf /etc/supervisor/conf.d/queue.conf
+fi
+
+/wait
+
+# prepare our database to be ready for traffic
+printf "Upgrading/Installing database updates and patches....\n"
+php /var/www/html/artisan install --db-host="database" --db-name="homestead" --db-username="homestead" --db-password="secret" --admin-email="admin@company.com" --admin-password="123456"
+
+
+# Seed the database with all the required data
+printf "Seed database with needed data....\n"
+php /var/www/html/artisan sample-data:seed
+
+#if [ "$env" == "local" ]; then
+#    printf "Testing application......\n"
+#    /var/www/html/vendor/bin/phpunit --testdox -v
+#fi
+
+# Start the application
+printf "Starting appplication... \n"
+
+
+# start supervisor
+exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

@@ -1,0 +1,22 @@
+{
+    "cluster": "serviceright-wordpress",
+    "serviceName": "booking-service",
+    "taskDefinition": "booking-service",
+    "serviceRegistries": [
+        {
+            "registryArn": "arn:aws:servicediscovery:eu-central-1:339951081844:service/srv-zvvzawzhdkydyxc4",
+            "containerName": "app"
+        }
+    ],
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "subnet-08e070697103b96ef"
+            ],
+            "securityGroups": [
+                "sg-05465eaf5c802c657"
+            ],
+            "assignPublicIp": "DISABLED"
+        }
+    }
+}
